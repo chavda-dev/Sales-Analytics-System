@@ -1,5 +1,5 @@
-"""
-analytics.py — Advanced Analytics Engine
+﻿"""
+analytics.py â€” Advanced Analytics Engine
 Computes KPIs, cohort analysis, RFM, trend detection,
 anomaly detection, forecasting, and auto-generated insights.
 """
@@ -23,9 +23,9 @@ def load_fact() -> pd.DataFrame:
     return df
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # 1. KPI Calculations
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def compute_kpis(df: pd.DataFrame) -> dict:
     """Compute top-level business KPIs."""
@@ -58,9 +58,9 @@ def compute_kpis(df: pd.DataFrame) -> dict:
     }
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # 2. Monthly Revenue + Moving Averages
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def compute_time_series(df: pd.DataFrame) -> pd.DataFrame:
     """Daily revenue with 7-day and 30-day rolling averages."""
@@ -89,12 +89,12 @@ def compute_monthly_growth(df: pd.DataFrame) -> pd.DataFrame:
     return monthly
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # 3. Cohort Retention Analysis
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def compute_cohort_retention(df: pd.DataFrame) -> pd.DataFrame:
-    """Build cohort retention matrix (cohort_month × months_since_first_purchase)."""
+    """Build cohort retention matrix (cohort_month Ã- months_since_first_purchase)."""
     df = df.copy()
     df["period_month"] = df["date"].dt.to_period("M")
 
@@ -117,12 +117,12 @@ def compute_cohort_retention(df: pd.DataFrame) -> pd.DataFrame:
     return retention.fillna(0)
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # 4. Anomaly Detection
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def detect_anomalies(daily: pd.DataFrame, window: int = 30, z_thresh: float = 2.5) -> pd.DataFrame:
-    """Flag days where revenue deviates > z_thresh σ from rolling mean."""
+    """Flag days where revenue deviates > z_thresh Ïƒ from rolling mean."""
     daily = daily.copy()
     rolling_mean = daily["revenue"].rolling(window, min_periods=5).mean()
     rolling_std = daily["revenue"].rolling(window, min_periods=5).std()
@@ -135,9 +135,9 @@ def detect_anomalies(daily: pd.DataFrame, window: int = 30, z_thresh: float = 2.
     return daily
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # 5. Seasonality Detection (STL - simplified)
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def detect_seasonality(df: pd.DataFrame) -> dict:
     """Detect seasonal patterns: best/worst months and peak day of week."""
@@ -156,9 +156,9 @@ def detect_seasonality(df: pd.DataFrame) -> dict:
     }
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # 6. Forecasting (ARIMA or Linear Fallback)
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def forecast_revenue(monthly: pd.DataFrame, periods: int = 6) -> pd.DataFrame:
     """Forecast next N months of revenue using ARIMA(2,1,2) or linear trend."""
@@ -197,9 +197,9 @@ def forecast_revenue(monthly: pd.DataFrame, periods: int = 6) -> pd.DataFrame:
     return forecast_df
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # 7. Category & Region Analytics
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def compute_category_stats(df: pd.DataFrame) -> pd.DataFrame:
     cat = df.groupby("category").agg(
@@ -237,9 +237,9 @@ def compute_top_products(df: pd.DataFrame, n: int = 20) -> pd.DataFrame:
     return top.nlargest(n, "revenue")
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # 8. Auto-Generated Insights
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def generate_insights(kpis: dict, cat_stats: pd.DataFrame, region_stats: pd.DataFrame,
                       monthly: pd.DataFrame, anomalies: pd.DataFrame, rfm: pd.DataFrame) -> list:
@@ -249,14 +249,14 @@ def generate_insights(kpis: dict, cat_stats: pd.DataFrame, region_stats: pd.Data
     # 1. Top region revenue share
     top_region = region_stats.iloc[0]
     insights.append(
-        f"🌍 Region '{top_region['region']}' contributes {top_region['revenue_share_pct']:.1f}% "
+        f"ðŸŒ Region '{top_region['region']}' contributes {top_region['revenue_share_pct']:.1f}% "
         f"of total revenue (${top_region['revenue']:,.0f})."
     )
 
     # 2. Highest return rate category
     max_return_cat = cat_stats.loc[cat_stats["return_rate_pct"].idxmax()]
     insights.append(
-        f"🔄 '{max_return_cat['category']}' has the highest return rate at "
+        f"ðŸ”„ '{max_return_cat['category']}' has the highest return rate at "
         f"{max_return_cat['return_rate_pct']:.1f}%, warranting quality review."
     )
 
@@ -265,38 +265,38 @@ def generate_insights(kpis: dict, cat_stats: pd.DataFrame, region_stats: pd.Data
     if not monthly_sorted.empty:
         worst_month = monthly_sorted.loc[monthly_sorted["mom_growth_pct"].idxmin()]
         insights.append(
-            f"📉 Largest revenue drop: {worst_month['mom_growth_pct']:.1f}% in "
+            f"ðŸ“‰ Largest revenue drop: {worst_month['mom_growth_pct']:.1f}% in "
             f"{worst_month['month_label']} vs the prior month."
         )
         best_month = monthly_sorted.loc[monthly_sorted["mom_growth_pct"].idxmax()]
         insights.append(
-            f"📈 Best growth month: {best_month['month_label']} saw +{best_month['mom_growth_pct']:.1f}% "
+            f"ðŸ“ˆ Best growth month: {best_month['month_label']} saw +{best_month['mom_growth_pct']:.1f}% "
             f"MoM revenue growth."
         )
 
     # 4. Top customer revenue concentration
     total_rev = kpis["total_revenue"]
     insights.append(
-        f"💰 Overall profit margin is {kpis['profit_margin_pct']:.1f}% "
+        f"ðŸ’° Overall profit margin is {kpis['profit_margin_pct']:.1f}% "
         f"on ${total_rev:,.0f} total revenue."
     )
 
     # 5. Return rate overall
     insights.append(
-        f"📦 Overall return rate is {kpis['return_rate_pct']:.1f}% "
+        f"ðŸ“¦ Overall return rate is {kpis['return_rate_pct']:.1f}% "
         f"across {kpis['total_orders']:,} orders."
     )
 
     # 6. Average Order Value
     insights.append(
-        f"🛒 Average Order Value (AOV) is ${kpis['aov']:,.2f} "
+        f"ðŸ›’ Average Order Value (AOV) is ${kpis['aov']:,.2f} "
         f"from {kpis['total_customers']:,} unique customers."
     )
 
     # 7. Best performing category
     best_cat = cat_stats.iloc[0]
     insights.append(
-        f"⭐ '{best_cat['category']}' is the top revenue-generating category "
+        f"â­ '{best_cat['category']}' is the top revenue-generating category "
         f"contributing {best_cat['revenue_share_pct']:.1f}% (${best_cat['revenue']:,.0f})."
     )
 
@@ -305,7 +305,7 @@ def generate_insights(kpis: dict, cat_stats: pd.DataFrame, region_stats: pd.Data
     n_spikes = (anomalies["anomaly_type"] == "Spike").sum()
     n_drops = (anomalies["anomaly_type"] == "Drop").sum()
     insights.append(
-        f"⚠️ {n_anomalies} revenue anomalies detected: {n_spikes} spikes and {n_drops} drops "
+        f"âš ï¸ {n_anomalies} revenue anomalies detected: {n_spikes} spikes and {n_drops} drops "
         f"over the analysis period."
     )
 
@@ -313,21 +313,21 @@ def generate_insights(kpis: dict, cat_stats: pd.DataFrame, region_stats: pd.Data
     if not rfm.empty and "rfm_segment" in rfm.columns:
         champions_pct = (rfm["rfm_segment"] == "Champions").mean() * 100
         insights.append(
-            f"🏆 {champions_pct:.1f}% of customers are classified as 'Champions' "
+            f"ðŸ† {champions_pct:.1f}% of customers are classified as 'Champions' "
             f"(high recency, frequency & monetary value)."
         )
 
     # 10. Current MoM growth
     insights.append(
-        f"📊 Latest MoM revenue growth: {kpis['mom_growth_pct']:+.1f}%."
+        f"ðŸ“Š Latest MoM revenue growth: {kpis['mom_growth_pct']:+.1f}%."
     )
 
     return insights
 
 
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Main
-# ─────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def main():
     print("=" * 60)
@@ -380,7 +380,7 @@ def main():
     cat_stats.to_parquet(os.path.join(PROCESSED_DIR, "category_stats.parquet"), index=False)
     region_stats.to_parquet(os.path.join(PROCESSED_DIR, "region_stats.parquet"), index=False)
 
-    print("\n✅ Analytics complete. All outputs saved to data/processed/")
+    print("\nâœ… Analytics complete. All outputs saved to data/processed/")
     print("=" * 60)
     return kpis, insights, daily_anomalies, monthly, forecast, cohort, cat_stats, region_stats
 

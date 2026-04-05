@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 """
-transformation.py — Feature Engineering & Data Transformation Layer
+transformation.py - Feature Engineering & Data Transformation Layer
 Merges cleaned datasets, engineers features (Revenue, Profit, CLV, RFM, Cohorts).
 Saves final analytical dataset to data/processed/fact_final.parquet.
 """
@@ -204,12 +205,12 @@ def main():
     fact.to_parquet(fact_path, index=False)
     rfm.to_parquet(rfm_path, index=False)
 
-    print(f"\n  ✓ fact_final.parquet — {len(fact):,} rows × {len(fact.columns)} cols")
-    print(f"  ✓ rfm.parquet — {len(rfm):,} customer rows")
-    print(f"  ✓ Revenue range: ${fact['revenue'].min():.2f} – ${fact['revenue'].max():.2f}")
-    print(f"  ✓ Profit margin avg: {fact['profit_margin'].mean():.1f}%")
-    print(f"  ✓ Return rate: {fact['return_flag'].mean()*100:.1f}%")
-    print("\n✅ Transformation complete.")
+    print(f"\n  [OK] fact_final.parquet -- {len(fact):,} rows x {len(fact.columns)} cols")
+    print(f"  [OK] rfm.parquet -- {len(rfm):,} customer rows")
+    print(f"  [OK] Revenue range: ${fact['revenue'].min():.2f} - ${fact['revenue'].max():.2f}")
+    print(f"  [OK] Profit margin avg: {fact['profit_margin'].mean():.1f}%")
+    print(f"  [OK] Return rate: {fact['return_flag'].mean()*100:.1f}%")
+    print("\n[DONE] Transformation complete.")
     print("=" * 60)
     return fact, rfm
 

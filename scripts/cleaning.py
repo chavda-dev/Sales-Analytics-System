@@ -1,15 +1,14 @@
+# -*- coding: utf-8 -*-
 """
-cleaning.py — Data Cleaning Layer
+cleaning.py - Data Cleaning Layer
 Handles missing values, deduplication, type coercion, outlier capping,
 and category normalization. Saves cleaned data to data/processed/ as Parquet.
 """
 
 import os
-import re
 import numpy as np
 import pandas as pd
 from dateutil import parser as date_parser
-from scipy import stats
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW_DIR = os.path.join(BASE_DIR, "data", "raw")
@@ -178,9 +177,9 @@ def main():
         path = os.path.join(PROCESSED_DIR, f"{name}_clean.parquet")
         df.to_parquet(path, index=False)
         remaining_nulls = df.isnull().sum().sum()
-        print(f"\n  ✓ Saved {name}_clean.parquet — {len(df):,} rows | remaining NaNs: {remaining_nulls}")
+        print(f"\n  [OK] Saved {name}_clean.parquet -- {len(df):,} rows | remaining NaNs: {remaining_nulls}")
 
-    print("\n✅ Data cleaning complete. Clean data saved to data/processed/")
+    print("\n[DONE] Data cleaning complete. Clean data saved to data/processed/")
     print("=" * 60)
     return cleaned
 

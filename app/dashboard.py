@@ -1,4 +1,4 @@
-"""
+﻿"""
 dashboard.py — Interactive Streamlit Dashboard
 5-tab business intelligence dashboard with sidebar filters,
 KPI cards, Plotly interactive charts, and auto-generated insights.
@@ -7,11 +7,9 @@ KPI cards, Plotly interactive charts, and auto-generated insights.
 import os
 import sys
 import warnings
-import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import streamlit as st
 
 warnings.filterwarnings("ignore")
@@ -124,8 +122,31 @@ def check_data_ready():
     return missing
 
 
-# ─────────────────────────────────────────────
-# KPI Card Helper
+@st.cache_resource
+def run_pipeline_if_needed():
+    """Auto-run the pipeline if processed files are missing.
+    Enables zero-config cloud deployment - the app self-bootstraps on first launch.
+    Takes ~60 seconds on first boot, then results are cached.
+    """
+    missing = check_data_ready()
+    if not missing:
+        return "ready"
+
+    import importlib.util
+
+    def run_script(script_name):
+        path = os.path.join(BASE_DIR, "scripts", script_name)
+        spec = importlib.util.spec_from_file_location("mod", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        mod.main()
+
+    for step in ["ingestion.py", "cleaning.py", "transformation.py",
+                 "db_loader.py", "analytics.py"]:
+        run_script(step)
+    return "ready"
+
+
 # ─────────────────────────────────────────────
 
 def kpi_card(label: str, value: str, delta: str = None, delta_good: bool = True):
@@ -190,12 +211,11 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    # Data readiness check
-    missing = check_data_ready()
-    if missing:
-        st.error(f"❌ Missing data files: {', '.join(missing)}")
-        st.info("Run the pipeline first:\n```bash\npython scripts/ingestion.py\npython scripts/cleaning.py\npython scripts/transformation.py\npython scripts/db_loader.py\npython scripts/analytics.py\n```")
-        st.stop()
+    # Auto-bootstrap pipeline on first launch (enables cloud deployment)
+    if check_data_ready():
+        with st.spinner("Initializing data pipeline for the first time... (~60 seconds)"):
+            run_pipeline_if_needed()
+        st.rerun()
 
     fact, daily, monthly, forecast, cohort, cat_stats, region_stats, rfm = load_all_data()
 
@@ -361,16 +381,11 @@ def main():
             st.plotly_chart(fig_clv, use_container_width=True)
 
         st.subheader("Customer Cohort Retention (%)")
-        cohort_display = cohort.astype(float).reset_index()
-        cohort_display["cohort"] = cohort_display["cohort"].astype(str)
-        cohort_melt = cohort_display.melt(id_vars="cohort", var_name="months_since",
-                                           value_name="retention")
-        fig_cohort = px.density_heatmap(cohort_melt, x="months_since", y="cohort",
-                                          z="retention", histfunc="avg",
-                                          color_continuous_scale="Blues")
-        if not cohort_display.empty:
-            cohort_vals = cohort.astype(float)
-            fig_cohort2 = px.imshow(cohort_vals.head(18), text_auto=".0f",
+        cohort_vals = cohort.astype(float).head(18)
+        # Ensure index is string (it may be Period objects)
+        cohort_vals.index = cohort_vals.index.astype(str)
+        if not cohort_vals.empty:
+            fig_cohort2 = px.imshow(cohort_vals, text_auto=".0f",
                                      color_continuous_scale="Blues",
                                      labels=dict(color="Retention %"),
                                      zmin=0, zmax=100)
@@ -627,3 +642,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

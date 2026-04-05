@@ -1,12 +1,12 @@
+# -*- coding: utf-8 -*-
 """
-db_loader.py — Database Layer
+db_loader.py - Database Layer
 Loads cleaned/transformed data into SQLite via SQLAlchemy.
 Creates star schema, loads all dimension and fact tables,
 creates views, and runs validation queries.
 """
 
 import os
-import sqlite3
 import pandas as pd
 from sqlalchemy import create_engine, text
 
@@ -35,7 +35,7 @@ def execute_schema(engine):
             except Exception as e:
                 print(f"    Warning executing statement: {e}")
         conn.commit()
-    print("  ✓ Schema created")
+    print("  [OK] Schema created")
 
 
 def load_dimensions(engine, fact: pd.DataFrame, products: pd.DataFrame, customers: pd.DataFrame):
@@ -51,12 +51,12 @@ def load_dimensions(engine, fact: pd.DataFrame, products: pd.DataFrame, customer
         clv_segment=("clv_segment", "first"),
     ).reset_index()
     dim_cust.to_sql("dim_customers", engine, if_exists="replace", index=False)
-    print(f"    ✓ dim_customers: {len(dim_cust):,} rows")
+    print(f"    [OK] dim_customers: {len(dim_cust):,} rows")
 
     # dim_products
     products_db = products[["product_id", "product_name", "category", "cost_price", "selling_price"]].drop_duplicates("product_id")
     products_db.to_sql("dim_products", engine, if_exists="replace", index=False)
-    print(f"    ✓ dim_products: {len(products_db):,} rows")
+    print(f"    [OK] dim_products: {len(products_db):,} rows")
 
     # dim_time
     fact["date"] = pd.to_datetime(fact["date"])
@@ -64,7 +64,7 @@ def load_dimensions(engine, fact: pd.DataFrame, products: pd.DataFrame, customer
     dim_time["date_id"] = dim_time["date"].dt.strftime("%Y-%m-%d")
     dim_time["date"] = dim_time["date"].dt.strftime("%Y-%m-%d")
     dim_time.to_sql("dim_time", engine, if_exists="replace", index=False)
-    print(f"    ✓ dim_time: {len(dim_time):,} rows")
+    print(f"    [OK] dim_time: {len(dim_time):,} rows")
 
 
 def load_fact(engine, fact: pd.DataFrame):
@@ -82,7 +82,7 @@ def load_fact(engine, fact: pd.DataFrame):
     fact_db = fact_db[available_cols].rename(columns={"reason": "return_reason"})
 
     fact_db.to_sql("fact_sales", engine, if_exists="replace", index=False)
-    print(f"    ✓ fact_sales: {len(fact_db):,} rows")
+    print(f"    [OK] fact_sales: {len(fact_db):,} rows")
 
 
 def run_validation(engine):
@@ -121,7 +121,7 @@ def main():
     load_fact(engine, fact)
     run_validation(engine)
 
-    print(f"\n✅ Database loaded: {DB_PATH}")
+    print(f"\n[DONE] Database loaded: {DB_PATH}")
     print("=" * 60)
     return engine
 

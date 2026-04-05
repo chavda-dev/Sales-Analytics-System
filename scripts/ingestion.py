@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 """
-ingestion.py — Data Ingestion Layer
+ingestion.py - Data Ingestion Layer
 Generates realistic synthetic datasets with intentional data quality issues.
 Saves raw CSVs to data/raw/.
 """
@@ -207,10 +208,10 @@ def main():
     for name, df in datasets.items():
         path = os.path.join(RAW_DIR, f"{name}.csv")
         df.to_csv(path, index=False)
-        print(f"  ✓ Saved {name}.csv — {len(df):,} rows × {len(df.columns)} cols | "
+        print(f"  [OK] Saved {name}.csv -- {len(df):,} rows x {len(df.columns)} cols | "
               f"missing: {df.isnull().sum().sum()} cells")
 
-    print("\n✅ Data ingestion complete. Raw CSVs saved to data/raw/")
+    print("\n[DONE] Data ingestion complete. Raw CSVs saved to data/raw/")
     print("=" * 60)
 
 
