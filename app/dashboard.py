@@ -29,9 +29,11 @@ st.set_page_config(
 # THEME
 # ══════════════════════════════════════════════════════════════════
 st.markdown("""
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
 
 /* ── CSS variables ── */
 :root {
@@ -86,59 +88,85 @@ html, body { background: var(--bg) !important; }
     border-right: 1px solid var(--bdr) !important;
 }
 
-/* ── Sidebar collapse button (the ‹ arrow inside the sidebar) ── */
-[data-testid="stSidebarCollapseButton"] {
-    position: absolute !important;
-    top: 14px !important;
-    right: 10px !important;
+/* ── Make Material Symbols font render the icon ligatures ── */
+[data-testid="stIconMaterial"] {
+    font-family: 'Material Symbols Rounded' !important;
+    font-size: 18px !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    line-height: 1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24 !important;
+    -webkit-font-smoothing: antialiased !important;
 }
+
+/* ── Sidebar header strip ── */
+[data-testid="stSidebarHeader"] {
+    background: var(--card) !important;
+    padding: 6px 8px 4px !important;
+    border-bottom: 1px solid var(--bdr) !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+}
+
+/* ── Collapse button (‹‹ inside sidebar) ── */
 [data-testid="stSidebarCollapseButton"] button {
     background: var(--card2) !important;
     border: 1px solid var(--bdr) !important;
     border-radius: 8px !important;
-    color: var(--t2) !important;
-    width: 28px !important;
-    height: 28px !important;
+    width: 30px !important;
+    height: 30px !important;
     padding: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    transition: background .15s, color .15s !important;
+    cursor: pointer !important;
+    transition: background .15s, border-color .15s !important;
+    color: var(--t2) !important;
 }
 [data-testid="stSidebarCollapseButton"] button:hover {
     background: var(--blue) !important;
-    color: #fff !important;
     border-color: var(--blue) !important;
+    color: #fff !important;
 }
-[data-testid="stSidebarCollapseButton"] button svg {
-    width: 16px !important;
-    height: 16px !important;
-    fill: currentColor !important;
+[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+    color: inherit !important;
+    font-size: 16px !important;
 }
 
-/* ── Expand tab (shown when sidebar is fully collapsed) ── */
+/* ── Expand tab (floating pill when sidebar is fully hidden) ── */
 [data-testid="collapsedControl"] {
-    background: var(--card) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: var(--card2) !important;
     border: 1px solid var(--bdr) !important;
     border-left: none !important;
     border-radius: 0 10px 10px 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    padding: 12px 6px !important;
-    box-shadow: 4px 0 16px rgba(0,0,0,0.4) !important;
+    padding: 14px 5px !important;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.5) !important;
     transition: background .15s, border-color .15s !important;
-    z-index: 999 !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer !important;
 }
 [data-testid="collapsedControl"]:hover {
     background: var(--blue) !important;
     border-color: var(--blue) !important;
 }
-[data-testid="collapsedControl"] svg {
-    fill: var(--t2) !important;
-    width: 18px !important;
-    height: 18px !important;
+[data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
+    color: var(--t2) !important;
+    font-size: 16px !important;
 }
-[data-testid="collapsedControl"]:hover svg { fill: #fff !important; }
+[data-testid="collapsedControl"]:hover [data-testid="stIconMaterial"] {
+    color: #fff !important;
+}
 
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] label,
