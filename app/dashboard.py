@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, "scripts"))
 PROCESSED_DIR = os.path.join(BASE_DIR, "data", "processed")
 
 st.set_page_config(
-    page_title="Sales Analytics",
+    page_title="Sales Intelligence Hub",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -31,6 +31,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
 
 /* ── CSS variables ── */
 :root {
@@ -84,6 +85,61 @@ html, body { background: var(--bg) !important; }
 [data-testid="stSidebar"] {
     border-right: 1px solid var(--bdr) !important;
 }
+
+/* ── Sidebar collapse button (the ‹ arrow inside the sidebar) ── */
+[data-testid="stSidebarCollapseButton"] {
+    position: absolute !important;
+    top: 14px !important;
+    right: 10px !important;
+}
+[data-testid="stSidebarCollapseButton"] button {
+    background: var(--card2) !important;
+    border: 1px solid var(--bdr) !important;
+    border-radius: 8px !important;
+    color: var(--t2) !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background .15s, color .15s !important;
+}
+[data-testid="stSidebarCollapseButton"] button:hover {
+    background: var(--blue) !important;
+    color: #fff !important;
+    border-color: var(--blue) !important;
+}
+[data-testid="stSidebarCollapseButton"] button svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
+}
+
+/* ── Expand tab (shown when sidebar is fully collapsed) ── */
+[data-testid="collapsedControl"] {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    border-left: none !important;
+    border-radius: 0 10px 10px 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    padding: 12px 6px !important;
+    box-shadow: 4px 0 16px rgba(0,0,0,0.4) !important;
+    transition: background .15s, border-color .15s !important;
+    z-index: 999 !important;
+}
+[data-testid="collapsedControl"]:hover {
+    background: var(--blue) !important;
+    border-color: var(--blue) !important;
+}
+[data-testid="collapsedControl"] svg {
+    fill: var(--t2) !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+[data-testid="collapsedControl"]:hover svg { fill: #fff !important; }
+
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] span:not([data-baseweb]) {
@@ -590,11 +646,11 @@ def main():
             <div class="hdr-logo">📊</div>
             <div>
                 <div class="hdr-title-row">
-                    <span class="hdr-title">Sales Analytics</span>
+                    <span class="hdr-title">Sales Intelligence Hub</span>
                     <span class="hdr-live">Live</span>
                 </div>
                 <div class="hdr-sub">
-                    End-to-End Business Intelligence &nbsp;·&nbsp; 3 Years of Data &nbsp;·&nbsp; Real-Time Filters
+                    Revenue · Customers · Forecasting · Anomalies &nbsp;·&nbsp; 3 Years · 10K+ Orders · Real-Time
                 </div>
             </div>
         </div>
