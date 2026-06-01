@@ -311,6 +311,133 @@ hr { border: none !important; border-top: 1px solid var(--bdr) !important; margi
 /* ── General text ── */
 h1, h2, h3 { color: var(--t1) !important; }
 p, .stMarkdown p { color: var(--t2) !important; }
+
+/* ═══════════════════════════════════════
+   HEADER CLASSES (used for responsive)
+═══════════════════════════════════════ */
+.hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 0 18px;
+    border-bottom: 1px solid var(--bdr);
+    margin-bottom: 6px;
+    gap: 12px;
+}
+.hdr-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+.hdr-logo {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.15rem; flex-shrink: 0;
+}
+.hdr-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hdr-title { font-size: 1.2rem; font-weight: 800; color: #f0f6ff; letter-spacing: -.4px; white-space: nowrap; }
+.hdr-live {
+    background: rgba(59,130,246,.16); color: #60a5fa;
+    font-size: 0.6rem; font-weight: 700; padding: 2px 7px;
+    border-radius: 4px; letter-spacing: 1.2px; text-transform: uppercase;
+    border: 1px solid rgba(59,130,246,.25); white-space: nowrap;
+}
+.hdr-sub { color: #3d5475; font-size: 0.74rem; margin-top: 3px; }
+.hdr-chips { display: flex; gap: 8px; flex-shrink: 0; }
+.hdr-chip {
+    background: var(--card); border: 1px solid var(--bdr);
+    border-radius: 9px; padding: 8px 16px; text-align: center;
+}
+.hdr-chip-lbl { color: #3d5475; font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+.hdr-chip-val { color: #8ba3c7; font-size: 0.78rem; font-weight: 600; }
+.hdr-chip-val.accent { color: #60a5fa; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+═══════════════════════════════════════ */
+
+/* ── Tablet  ≤ 1100px ── */
+@media screen and (max-width: 1100px) {
+    .block-container { padding: 0 1.2rem 2rem !important; }
+    .kpi-val { font-size: 1.5rem !important; }
+    .kpi { padding: 16px 14px 12px !important; }
+    .hdr-title { font-size: 1.05rem !important; }
+    .hdr-sub { font-size: 0.68rem !important; }
+}
+
+/* ── Mobile ≤ 768px ── */
+@media screen and (max-width: 768px) {
+    /* Spacing */
+    .block-container { padding: 0 0.5rem 2rem !important; }
+
+    /* Header */
+    .hdr { padding: 14px 0 12px !important; }
+    .hdr-chips { display: none !important; }
+    .hdr-sub { display: none !important; }
+    .hdr-logo { width: 32px !important; height: 32px !important; font-size: 1rem !important; border-radius: 8px !important; }
+    .hdr-title { font-size: 0.95rem !important; }
+    .hdr-left { gap: 10px !important; }
+
+    /* Columns — wrap to 2 per row */
+    [data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    [data-testid="column"] {
+        min-width: calc(50% - 4px) !important;
+        flex: 1 1 calc(50% - 4px) !important;
+        width: calc(50% - 4px) !important;
+    }
+
+    /* KPI cards */
+    .kpi { height: auto !important; padding: 14px 13px 11px !important; }
+    .kpi-val { font-size: 1.3rem !important; letter-spacing: -0.5px !important; }
+    .kpi-lbl { font-size: 0.6rem !important; margin-bottom: 6px !important; }
+    .kpi-ico { display: none !important; }
+    .kpi-bdg { font-size: 0.65rem !important; padding: 2px 6px !important; }
+
+    /* Section headers */
+    .shdr { margin: 1.3rem 0 0.6rem !important; }
+    .shdr-txt { font-size: 0.82rem !important; }
+    .shdr-badge { display: none !important; }
+
+    /* Tabs — horizontal scroll */
+    .stTabs [data-baseweb="tab-list"] {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        border-radius: 8px !important;
+        padding: 3px !important;
+    }
+    .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar { display: none !important; }
+    .stTabs [data-baseweb="tab"] {
+        white-space: nowrap !important;
+        font-size: 0.72rem !important;
+        padding: 6px 10px !important;
+    }
+
+    /* Insight cards */
+    .ins { font-size: 0.82rem !important; padding: 10px 12px !important; }
+
+    /* Sidebar improvements on mobile */
+    [data-testid="stSidebar"] .block-container { padding: 1rem 0.75rem !important; }
+
+    /* Native metrics in 3-col row */
+    [data-testid="stMetric"] { padding: 10px 12px !important; }
+    [data-testid="stMetricValue"] { font-size: 1.1rem !important; }
+}
+
+/* ── Small mobile ≤ 480px ── */
+@media screen and (max-width: 480px) {
+    /* Single column everything */
+    [data-testid="column"] {
+        min-width: 100% !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+    .kpi-val { font-size: 1.45rem !important; }
+    .block-container { padding: 0 0.3rem 1.5rem !important; }
+    .hdr-live { display: none !important; }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -458,38 +585,27 @@ def main():
 
     # ── Product header ───────────────────────────────────────────
     st.markdown("""
-    <div style="display:flex;align-items:center;justify-content:space-between;
-                padding:22px 0 18px;border-bottom:1px solid #182d4a;margin-bottom:6px;">
-        <div style="display:flex;align-items:center;gap:14px;">
-            <div style="background:linear-gradient(135deg,#3b82f6,#6366f1);width:38px;height:38px;
-                        border-radius:10px;display:flex;align-items:center;justify-content:center;
-                        font-size:1.15rem;flex-shrink:0;">
-                📊
-            </div>
+    <div class="hdr">
+        <div class="hdr-left">
+            <div class="hdr-logo">📊</div>
             <div>
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <span style="font-size:1.2rem;font-weight:800;color:#f0f6ff;letter-spacing:-.4px;">
-                        Sales Analytics
-                    </span>
-                    <span style="background:rgba(59,130,246,.16);color:#60a5fa;font-size:0.6rem;
-                                 font-weight:700;padding:2px 7px;border-radius:4px;
-                                 letter-spacing:1.2px;text-transform:uppercase;border:1px solid rgba(59,130,246,.25);">
-                        Live
-                    </span>
+                <div class="hdr-title-row">
+                    <span class="hdr-title">Sales Analytics</span>
+                    <span class="hdr-live">Live</span>
                 </div>
-                <div style="color:#3d5475;font-size:0.74rem;margin-top:3px;">
+                <div class="hdr-sub">
                     End-to-End Business Intelligence &nbsp;·&nbsp; 3 Years of Data &nbsp;·&nbsp; Real-Time Filters
                 </div>
             </div>
         </div>
-        <div style="display:flex;gap:8px;">
-            <div style="background:#0c1a2e;border:1px solid #182d4a;border-radius:9px;padding:8px 16px;text-align:center;">
-                <div style="color:#3d5475;font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Platform</div>
-                <div style="color:#8ba3c7;font-size:0.78rem;font-weight:600;">Streamlit</div>
+        <div class="hdr-chips">
+            <div class="hdr-chip">
+                <div class="hdr-chip-lbl">Platform</div>
+                <div class="hdr-chip-val">Streamlit</div>
             </div>
-            <div style="background:#0c1a2e;border:1px solid #182d4a;border-radius:9px;padding:8px 16px;text-align:center;">
-                <div style="color:#3d5475;font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Version</div>
-                <div style="color:#60a5fa;font-size:0.78rem;font-weight:700;">2.0</div>
+            <div class="hdr-chip">
+                <div class="hdr-chip-lbl">Version</div>
+                <div class="hdr-chip-val accent">2.0</div>
             </div>
         </div>
     </div>
