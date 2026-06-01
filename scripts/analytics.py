@@ -1,4 +1,4 @@
-﻿"""
+"""
 analytics.py â€” Advanced Analytics Engine
 Computes KPIs, cohort analysis, RFM, trend detection,
 anomaly detection, forecasting, and auto-generated insights.

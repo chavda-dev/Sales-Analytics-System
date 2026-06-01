@@ -11,6 +11,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 warnings.filterwarnings("ignore")
 
@@ -138,32 +139,61 @@ html, body { background: var(--bg) !important; }
     font-size: 16px !important;
 }
 
-/* ── Expand tab (floating pill when sidebar is fully hidden) ── */
-[data-testid="collapsedControl"] {
+/* ── Collapsed sidebar: force display:block so fixed children aren't killed ── */
+[data-testid="stSidebar"][aria-expanded="false"] {
+    display: block !important;
+    visibility: visible !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    overflow: visible !important;
+}
+
+/* Hide sidebar filters/content when collapsed, but NOT the header (it holds the button) */
+[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarContent"],
+[data-testid="stSidebar"][aria-expanded="false"] section,
+[data-testid="stSidebar"][aria-expanded="false"] .block-container {
+    display: none !important;
+}
+
+/* Pull the collapse button into a fixed pill on the left edge */
+[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarCollapseButton"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    left: 0 !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
-    background: var(--card2) !important;
-    border: 1px solid var(--bdr) !important;
-    border-left: none !important;
-    border-radius: 0 10px 10px 0 !important;
-    padding: 14px 5px !important;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.5) !important;
-    transition: background .15s, border-color .15s !important;
-    z-index: 9999 !important;
-    display: flex !important;
+    z-index: 999999 !important;
     align-items: center !important;
-    cursor: pointer !important;
+    justify-content: center !important;
 }
-[data-testid="collapsedControl"]:hover {
+[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarCollapseButton"] button {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     background: var(--blue) !important;
-    border-color: var(--blue) !important;
-}
-[data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
-    color: var(--t2) !important;
-    font-size: 16px !important;
-}
-[data-testid="collapsedControl"]:hover [data-testid="stIconMaterial"] {
+    border: none !important;
+    border-radius: 0 12px 12px 0 !important;
+    width: auto !important;
+    height: 52px !important;
+    padding: 0 12px !important;
     color: #fff !important;
+    box-shadow: 4px 0 24px rgba(59,130,246,0.5) !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background .15s, box-shadow .15s !important;
+}
+[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarCollapseButton"] button:hover {
+    background: #2563eb !important;
+    box-shadow: 4px 0 32px rgba(59,130,246,0.7) !important;
+}
+[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+    color: #fff !important;
+    visibility: visible !important;
+    font-size: 20px !important;
 }
 
 [data-testid="stSidebar"] p,
@@ -522,6 +552,93 @@ p, .stMarkdown p { color: var(--t2) !important; }
 }
 </style>
 """, unsafe_allow_html=True)
+
+# ── Floating sidebar expand button (JS in parent doc via iframe) ────────────
+components.html("""
+<script>
+(function () {
+    var BLUE = '#3b82f6', BLUE_H = '#2563eb';
+
+    function mount() {
+        try {
+            var doc = window.parent.document;
+
+            /* remove stale button from previous renders */
+            var old = doc.getElementById('__sb_expand');
+            if (old) old.remove();
+
+            var sidebar = doc.querySelector('[data-testid="stSidebar"]');
+            if (!sidebar) { setTimeout(mount, 300); return; }
+
+            /* build the pill button */
+            var btn = doc.createElement('button');
+            btn.id = '__sb_expand';
+            btn.title = 'Open filters';
+            btn.innerHTML = '&#x276F;'; /* › */
+            var s = btn.style;
+            s.cssText = [
+                'position:fixed', 'left:0', 'top:50%',
+                'transform:translateY(-50%)',
+                'z-index:2147483647',
+                'background:' + BLUE,
+                'color:#fff', 'border:none',
+                'border-radius:0 12px 12px 0',
+                'width:28px', 'height:52px',
+                'font-size:18px', 'font-weight:700',
+                'line-height:52px', 'text-align:center',
+                'cursor:pointer', 'display:none',
+                'box-shadow:4px 0 20px rgba(59,130,246,.55)',
+                'transition:background .15s',
+                'padding:0'
+            ].join(';');
+
+            btn.onmouseenter = function () { btn.style.background = BLUE_H; };
+            btn.onmouseleave = function () { btn.style.background = BLUE; };
+
+            btn.onclick = function () {
+                /* try every possible collapse-button selector */
+                var targets = [
+                    '[data-testid="stSidebarCollapseButton"] button',
+                    '[data-testid="collapsedControl"] button',
+                    '[data-testid="stSidebarCollapsedControl"] button'
+                ];
+                for (var i = 0; i < targets.length; i++) {
+                    var b = doc.querySelector(targets[i]);
+                    if (b) {
+                        b.dispatchEvent(new MouseEvent('click', {bubbles:true, cancelable:true}));
+                        return;
+                    }
+                }
+                /* last resort: toggle aria-expanded directly */
+                var sb = doc.querySelector('[data-testid="stSidebar"]');
+                if (sb) sb.setAttribute('aria-expanded', 'true');
+            };
+
+            doc.body.appendChild(btn);
+
+            /* show our pill only when the sidebar is collapsed */
+            function sync() {
+                var sb = doc.querySelector('[data-testid="stSidebar"]');
+                if (!sb) return;
+                var collapsed = sb.getAttribute('aria-expanded') === 'false'
+                             || sb.offsetWidth < 10;
+                btn.style.display = collapsed ? 'block' : 'none';
+            }
+
+            new MutationObserver(sync).observe(doc.body, {
+                attributes: true, subtree: true,
+                attributeFilter: ['aria-expanded', 'style', 'class']
+            });
+            setInterval(sync, 400);   /* polling fallback */
+            sync();
+
+        } catch (e) { console.warn('sidebar-expand:', e); }
+    }
+
+    setTimeout(mount, 600);
+})();
+</script>
+""", height=0, scrolling=False)
 
 # ── Plotly config ──────────────────────────────
 PLOTLY_CFG = {"displayModeBar": False, "scrollZoom": False}
