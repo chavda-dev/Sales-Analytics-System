@@ -1,12 +1,3 @@
--- ============================================================
--- queries.sql — Analytical SQL Queries
--- Sales Analytics System
--- ============================================================
-
--- ─────────────────────────────────────────────
--- 1. Revenue by Region
--- ─────────────────────────────────────────────
--- Q1: Revenue, profit, and order count by region
 SELECT
     fs.region,
     ROUND(SUM(fs.revenue), 2)                                AS total_revenue,
@@ -19,9 +10,6 @@ FROM fact_sales fs
 GROUP BY fs.region
 ORDER BY total_revenue DESC;
 
--- ─────────────────────────────────────────────
--- 2. Top-Selling Products (by Revenue)
--- ─────────────────────────────────────────────
 SELECT
     dp.product_id,
     dp.product_name,
@@ -36,9 +24,7 @@ GROUP BY dp.product_id, dp.product_name, dp.category
 ORDER BY total_revenue DESC
 LIMIT 20;
 
--- ─────────────────────────────────────────────
--- 3. Monthly Revenue + Growth Rate (MoM %)
--- ─────────────────────────────────────────────
+
 WITH monthly AS (
     SELECT
         dt.year,
@@ -71,9 +57,7 @@ SELECT
 FROM monthly_with_lag
 ORDER BY year, month;
 
--- ─────────────────────────────────────────────
--- 4. Category-wise Profit Margin
--- ─────────────────────────────────────────────
+
 SELECT
     dp.category,
     ROUND(SUM(fs.revenue), 2)                               AS total_revenue,
@@ -87,9 +71,7 @@ GROUP BY dp.category
 HAVING SUM(fs.revenue) > 0
 ORDER BY profit_margin_pct DESC;
 
--- ─────────────────────────────────────────────
--- 5. Customer Segmentation by CLV
--- ─────────────────────────────────────────────
+
 SELECT
     clv_segment,
     COUNT(DISTINCT customer_id)                 AS customer_count,
@@ -100,9 +82,7 @@ FROM fact_sales
 GROUP BY clv_segment
 ORDER BY avg_clv DESC;
 
--- ─────────────────────────────────────────────
--- 6. Return Rate by Category
--- ─────────────────────────────────────────────
+
 SELECT
     dp.category,
     COUNT(fs.order_id)                                       AS total_orders,
@@ -113,9 +93,7 @@ JOIN dim_products dp ON fs.product_id = dp.product_id
 GROUP BY dp.category
 ORDER BY return_rate_pct DESC;
 
--- ─────────────────────────────────────────────
--- 7. RFM Segment Distribution
--- ─────────────────────────────────────────────
+
 SELECT
     rfm_segment,
     COUNT(DISTINCT customer_id)  AS customer_count,
@@ -125,9 +103,7 @@ FROM fact_sales
 GROUP BY rfm_segment
 ORDER BY total_revenue DESC;
 
--- ─────────────────────────────────────────────
--- 8. Quarterly Revenue Trend
--- ─────────────────────────────────────────────
+
 SELECT
     dt.year,
     dt.quarter,
@@ -139,9 +115,7 @@ JOIN dim_time dt ON fs.date_id = dt.date_id
 GROUP BY dt.year, dt.quarter
 ORDER BY dt.year, dt.quarter;
 
--- ─────────────────────────────────────────────
--- 9. Top 10% Customers Revenue Contribution
--- ─────────────────────────────────────────────
+
 WITH customer_revenue AS (
     SELECT
         customer_id,
@@ -159,9 +133,6 @@ FROM customer_revenue
 GROUP BY decile
 ORDER BY decile;
 
--- ─────────────────────────────────────────────
--- 10. Region × Category Revenue Cross-Tab
--- ─────────────────────────────────────────────
 SELECT
     fs.region,
     dp.category,
